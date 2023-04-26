@@ -1,0 +1,60 @@
+[
+  {
+    "sitename": "homegate",
+    "url": "https://api.homegate.ch/search/listings",
+    "type": "API-POST",
+    "arguments": {
+      "fieldset": "srp-list",
+      "from": 0,
+      "query": {
+        "offerType": "RENT"
+      },
+      "categories": [
+        "APARTMENT"
+      ],
+      "excludeCategories": [],
+      "location": {
+        "geoTags": [
+          "geo-city-zurich"
+        ]
+      },
+      "monthlyRent": {
+        "to": 4000
+      },
+      "numberOfRooms": {
+        "from": 4
+      },
+      "offerType": "RENT",
+      "size": 20,
+      "sortBy": "listingType",
+      "sortDirection": "desc",
+      "trackTotalHits": true
+    },
+    "result": {
+      "implicit": true
+    }
+  },
+  {
+    "sitename": "flatfox",
+    "url": "https://flatfox.ch/api/v1/pin/",
+    "type": "API-GET",
+    "arguments": {
+      "east": 8.565311,
+      "max_count": 400,
+      "max_price": 4000,
+      "min_rooms": 4,
+      "north": 47.401032,
+      "object_category": "APARTMENT",
+      "offer_type": "RENT",
+      "south": 47.337237,
+      "west": 8.486383
+    },
+    "result": {
+      "implicit": false,
+      "resultType": "id",
+      "resultPath": "pk",
+      "resultFormat": "array",
+      "flatEndpoint": "https://flatfox.ch/en/flat/egal/"
+    }
+  }
+]
