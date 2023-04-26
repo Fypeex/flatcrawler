@@ -21,7 +21,7 @@ export type FlatListingCharacteristics = {
     "hasBalcony": boolean
 }
 export type FlatListingLocalization = {
-    [key in "de" | "fr" | "it" | "en"]: FlatListingLocalizationValue
+    [key in "de" | "fr" | "it" | "en"]?: FlatListingLocalizationValue
 } & {
     "primary": string
 }
@@ -69,10 +69,17 @@ export type FlatListingCard = {
     "size": string
 }
 
-export interface Flat {
+export interface Flat  {
     "listingType": FlatListingType
     "listing": FlatListing
     "listingCard": FlatListingCard
     "id": string,
-    "remoteViewing": boolean
+    "remoteViewing": boolean,
+}
+export type FlatResponse = FlatResponseHomegate | FlatResponseFlatfox[];
+export type FlatResponseHomegate = {
+    "results": Flat[],
+}
+export type FlatResponseFlatfox = {
+    "pk": string,
 }

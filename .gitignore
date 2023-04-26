@@ -1,0 +1,7 @@
+.idea
+node_modules
+token.json
+credentials.json
+target
+data
+package-lock.json

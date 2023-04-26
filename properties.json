@@ -54,7 +54,7 @@
       "resultType": "id",
       "resultPath": "pk",
       "resultFormat": "array",
-      "flatEndpoint": "https://flatfox.ch/en/flat/egal/"
+      "flatEndpoint": "https://flatfox.ch/api/v1/flat/"
     }
   }
 ]
