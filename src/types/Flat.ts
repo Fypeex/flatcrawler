@@ -14,11 +14,11 @@ export type FlatListingAddressGeoCoordinates = {
     "longitude": number
 }
 export type FlatListingCharacteristics = {
-    "livingSpace": number,
-    "numberOfRooms": number,
-    "floor": number,
-    "yearLastRenovated": number,
-    "hasBalcony": boolean
+    "livingSpace"?: number,
+    "numberOfRooms"?: number,
+    "floor"?: number,
+    "yearLastRenovated"?: number,
+    "hasBalcony"?: boolean
 }
 export type FlatListingLocalization = {
     [key in "de" | "fr" | "it" | "en"]?: FlatListingLocalizationValue
@@ -70,6 +70,8 @@ export type FlatListingCard = {
 }
 
 export interface Flat  {
+    "website": "homegate" | "flatfox" | string,
+    "link": string,
     "listingType": FlatListingType
     "listing": FlatListing
     "listingCard": FlatListingCard

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import fetch, {FetchError, Response} from "node-fetch";
 import {Flat, FlatResponse, FlatResponseFlatfox, FlatResponseHomegate} from "../types/Flat.js";
 import {FlatFoxResult} from "../types/FlatFoxResult.js";
-import {Parser} from "../Parser";
+import {Parser} from "../Parser.js";
 import {Storage} from "./Storage.js";
 import {FlatSetEvent} from "../types/CustomSet.js";
 
@@ -15,7 +15,7 @@ export class Crawler {
 
     constructor() {
         this.loadEndpoints();
-        this._persistentStorage = new Storage<Flat>("flats.json");
+        this._persistentStorage = new Storage<Flat>("flats.txt");
     }
 
     public loadEndpoints(): void {
@@ -30,14 +30,15 @@ export class Crawler {
 
         try {
             setInterval(() => {
-                console.log("Checking for new flats...");
+
                 this._endpoints.forEach((endpoint) => {
                     this.fetchResults(endpoint)
                         .then((result) => {
                             this.processResults(endpoint, result);
                         });
                 });
-            }, 1000 * 20);
+                this._consecutiveErrors = 0;
+            }, parseInt(process.env["CRAWLER_INTERVAL"] || "20000"));
 
             this._endpoints.forEach((endpoint) => {
                 this.fetchResults(endpoint)
@@ -128,6 +129,8 @@ export class Crawler {
             case "homegate": {
                 result = result as FlatResponseHomegate;
                 result.results.forEach((flat: Flat) => {
+                    flat.website = "homegate";
+                    flat.link = "https://www.homegate.ch/mieten/" + flat.id;
                     this._persistentStorage.addData(flat);
                 });
                 break;

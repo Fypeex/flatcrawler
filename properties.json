@@ -4,28 +4,26 @@
     "url": "https://api.homegate.ch/search/listings",
     "type": "API-POST",
     "arguments": {
-      "fieldset": "srp-list",
       "from": 0,
       "query": {
+        "categories": [
+          "APARTMENT"
+        ],
+        "excludeCategories": [],
+        "location": {
+          "geoTags": [
+            "geo-city-zurich"
+          ]
+        },
+        "monthlyRent": {
+          "to": 4000
+        },
+        "numberOfRooms": {
+          "from": 4
+        },
         "offerType": "RENT"
       },
-      "categories": [
-        "APARTMENT"
-      ],
-      "excludeCategories": [],
-      "location": {
-        "geoTags": [
-          "geo-city-zurich"
-        ]
-      },
-      "monthlyRent": {
-        "to": 4000
-      },
-      "numberOfRooms": {
-        "from": 4
-      },
-      "offerType": "RENT",
-      "size": 20,
+      "size": 100,
       "sortBy": "listingType",
       "sortDirection": "desc",
       "trackTotalHits": true

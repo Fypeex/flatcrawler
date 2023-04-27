@@ -7,18 +7,18 @@ export class Application {
     constructor(c:Crawler = new Crawler()) {
         this._crawler = c;
         this._notifier = new Notifier();
-        this._notifier.init().then(() => {
-            this._notifier.notify();
-        });
     }
 
-    public start(): void {
-        this._crawler.on("new-added", (flat) => {
-            console.log("Added new flat",flat.id);
+    public async start(): Promise<void> {
+        await this._notifier.init().catch((err) => {
+            console.error(err);
+            process.exit(1);
         });
-
-
-
+        this._crawler.on("new-added", (flat) => {
+            this._notifier.notify(flat).catch((err) => {
+                console.error(err);
+            });
+        });
         this._crawler.start();
     }
 }

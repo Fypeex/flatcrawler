@@ -1,5 +1,5 @@
 import fs from "fs";
-import {Parser} from "../Parser";
+import {Parser} from "../Parser.js";
 import {CustomSet} from "../types/CustomSet.js";
 
 export class Storage<T extends {
@@ -33,10 +33,14 @@ export class Storage<T extends {
     }
 
     private synchronize() {
-        fs.writeFileSync(this.location, Parser.parseTextToBase64(JSON.stringify(Array.of(this._data))));
+        const items: T[] = [];
+        this._data.forEach((item) => {
+            items.push(item);
+        });
+        fs.writeFileSync(this.location, Parser.parseTextToBase64(JSON.stringify(items)));
     }
     public addData(data: T): boolean {
-        if(this._data.add(data)) {
+        if(this._data.addData(data)) {
             this.synchronize();
             return true;
         }else return false;

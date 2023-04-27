@@ -1,12 +1,15 @@
 import {FlatFoxResult} from "./types/FlatFoxResult.js";
 import {
     Flat
-} from "./types/Flat";
-import {Mail} from "./types/Mail";
+} from "./types/Flat.js";
+import {Mail} from "./types/Mail.js";
+import fs from "fs";
 
 export class Parser {
     static parseFlatFoxToFlat(flat: FlatFoxResult): Flat {
         return {
+            website: "flatfox",
+            link: flat.url,
             id: flat.pk.toString(),
             listing: {
                 address: {
@@ -79,10 +82,23 @@ export class Parser {
         return Buffer.from(binary, 'base64').toString('utf8');
     }
     static parseFlatToEmail(mailData:Mail,flat:Flat):string {
-        return `From: ${mailData.from}` + "\r\n" +
-            `To: ${mailData.to}` + "\r\n" +
-            `Subject: ${mailData.subject}` + "\r\n\r\n" +
-            `${flat.listing.localization.de?.text.title}`
+        
+        let template: string = fs.readFileSync("./src/types/emailTemplate.html", "utf-8");
+        template = template.replace("{{website}}", flat.website.slice(0, 1).toUpperCase() + flat.website.slice(1));
+        template = template.replace("{{address}}", flat.listing.address.street + ", " + flat.listing.address.postalCode + " " + flat.listing.address.locality);
+        template = template.replace("{{price}}", flat.listing.prices.rent.gross.toString());
+        template = template.replace("{{rooms}}", flat.listing.characteristics.numberOfRooms?.toString() || "No data");
+        template = template.replace("{{area}}", flat.listing.characteristics.livingSpace?.toString() || "No data");
+        template = template.replace("{{description}}", flat.listing.localization.de?.text.description || "No description");
+        template = template.replace("{{link}}", flat.link);
+        template = template.replace("{{image}}", flat.listing.localization.de?.attachments[0]?.file || "");
+
+
+        return `From:${mailData.from}` + "\r\n" +
+            `To:${mailData.to}` + "\r\n" +
+            `Subject: ${mailData.subject}` + "\r\n" +
+            `Content-Type: text/html; charset=UTF-8` + "\r\n\r\n" +
+            `${template}`
     }
     static parseEmailToRaw(email:string):string {
         return btoa(email).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');

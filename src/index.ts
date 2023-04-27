@@ -1,4 +1,10 @@
 import {Application} from "./Application.js";
 
+import * as dotenv from "dotenv";
+dotenv.config();
 const app: Application = new Application();
-app.start();
+try {
+    app.start();
+}catch (error) {
+    console.error(error);
+}

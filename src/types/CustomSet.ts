@@ -15,7 +15,7 @@ export class CustomSet<T extends Object & {
 
         if(Array.from(this.values()).find((d:T) => d.id === data.id)) return false;
         else {
-            console.log(storedIds,data.id, !!storedIds.find((id) => id === data.id));
+            
             this._onNewAdded.forEach(listener => listener(data));
             this.add(data);
             return true;
