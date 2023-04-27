@@ -19,7 +19,7 @@ export class Notifier {
         }
         const mail: Mail = {
             from: "me",
-            to: process.env["EMAIL_RECIPIENT_DEV"] || "ffel.wg@gmail.com",
+            to: process.env["EMAIL_RECIPIENT"] || "ffel.wg@gmail.com",
             subject: "New flat found",
         }
         const message = Parser.parseFlatToEmail(mail, flat)
