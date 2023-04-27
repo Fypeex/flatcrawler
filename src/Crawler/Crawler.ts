@@ -39,7 +39,7 @@ export class Crawler {
                         });
                 });
                 this._consecutiveErrors = 0;
-            }, parseInt(process.env["CRAWLER_INTERVAL"] || "20000"));
+            }, parseInt(process.env["CRAWL_INTERVAL"] || "20000"));
 
             this._endpoints.forEach((endpoint) => {
                 this.fetchResults(endpoint)
@@ -141,10 +141,8 @@ export class Crawler {
                 break;
             }
             case "immoscout": {
-                console.log("SIZE", (result as ImmoscoutResult).pagingInfo.itemsOnPage)
                 for (const property of (result as ImmoscoutResult).properties) {
                     if(property.priceFormatted === "Price on request") {
-                        console.log("Skipping")
                         continue
                     }
                     const parsed: Flat = Parser.parseImmoscoutToFlat(property);
