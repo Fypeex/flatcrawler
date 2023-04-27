@@ -1,9 +1,8 @@
 import {FlatFoxResult} from "./types/FlatFoxResult.js";
-import {
-    Flat
-} from "./types/Flat.js";
+import {Flat} from "./types/Flat.js";
 import {Mail} from "./types/Mail.js";
 import fs from "fs";
+import {ImmoscoutResultProperty} from "./types/ImmoscoutResult";
 
 export class Parser {
     static parseFlatFoxToFlat(flat: FlatFoxResult): Flat {
@@ -71,6 +70,68 @@ export class Parser {
             },
             listingType: {
                 type: flat.object_type
+            },
+            remoteViewing: false
+        }
+    }
+    static parseImmoscoutToFlat(flat: ImmoscoutResultProperty): Flat {
+        return {
+            website: "immoscout",
+            link: "https://immoscout.ch" + flat.propertyUrl,
+            id: flat.id.toString(),
+            listing: {
+                address: {
+                    geoCoordinates: {
+                        accuracy: "HIGH",
+                        latitude: parseInt(flat.latitude.toString()),
+                        longitude: parseInt(flat.longitude.toString()),
+                        manual: false
+                    },
+                    locality: flat.cityName,
+                    postalCode: flat.zip.toString(),
+                    street: flat.street
+                },
+                categories: [],
+                characteristics: {
+                    livingSpace: flat.surfaceLiving,
+                    numberOfRooms: flat.numberOfRooms,
+                },
+                id: flat.id.toString(),
+                localization: {
+                    de: {
+                        attachments: flat.images.map((image) => {
+                            let url = image.url;
+                            url = url.replace("{width}",image.originalWidth.toString())
+                                .replace("{height}",image.originalHeight.toString())
+                                .replace("{resizemode}","1")
+                                .replace("{quality}","100")
+                            return {
+                                file: url,
+                                type: "IMAGE",
+                                url: url
+
+                            }
+                        }),
+                        text: {
+                            description: flat.shortDescription,
+                            title: flat.title
+                        },
+                        urls: []
+                    },
+                    primary: "de"
+                },
+                offerType: flat.offerTypeId == 1? "RENT":"Unknown",
+                platforms: ["immoscout"],
+                prices: {
+                    buy: {},
+                    currency: "CHF",
+                    rent: {
+                        gross: parseInt(flat.priceFormatted.replace("CHF","")),
+                        interval: "Unknown"
+                    }
+
+                },
+                valueAddedServices: {bundle: ""}
             },
             remoteViewing: false
         }

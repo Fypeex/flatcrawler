@@ -1,4 +1,4 @@
-import {Google} from "./Google";
+import {Google} from "./Google.js";
 import {google} from "googleapis";
 import {Parser} from "../Parser.js";
 import {Flat} from "../types/Flat.js";
@@ -19,7 +19,7 @@ export class Notifier {
         }
         const mail: Mail = {
             from: "me",
-            to: process.env["EMAIL_RECIPIENT"] || "ffel.wg@gmail.com",
+            to: process.env["EMAIL_RECIPIENT_DEV"] || "ffel.wg@gmail.com",
             subject: "New flat found",
         }
         const message = Parser.parseFlatToEmail(mail, flat)

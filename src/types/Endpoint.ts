@@ -1,5 +1,5 @@
 export interface Endpoint {
-    sitename: "homegate" | "flatfox",
+    sitename: "homegate" | "flatfox" | "immoscout",
     "url": string,
     "type": "API-GET" | "API-POST" | "HTML",
     "arguments": EndpointArguments

@@ -6,6 +6,7 @@ import {FlatFoxResult} from "../types/FlatFoxResult.js";
 import {Parser} from "../Parser.js";
 import {Storage} from "./Storage.js";
 import {FlatSetEvent} from "../types/CustomSet.js";
+import {ImmoscoutResult} from "../types/ImmoscoutResult.js";
 
 export class Crawler {
     private _persistentStorage: Storage<Flat>;
@@ -59,7 +60,7 @@ export class Crawler {
         }
     }
 
-    public async fetchResults(endpoint: Endpoint): Promise<any> {
+    public fetchResults(endpoint: Endpoint): Promise<any> {
         const url = endpoint.url;
         const method = endpoint.type === "API-POST" ? "POST" : "GET";
         const args = endpoint.arguments;
@@ -81,7 +82,6 @@ export class Crawler {
         switch (endpoint.sitename) {
             case "flatfox": {
                 return this.GET(endpoint.result.flatEndpoint + id);
-
             }
         }
     }
@@ -124,7 +124,7 @@ export class Crawler {
         else this.processResultsExplicit(endpoint, result);
     }
 
-    private processResultsImplicit(endpoint: Endpoint, result?: FlatResponse, flat?: FlatFoxResult): void {
+    private processResultsImplicit(endpoint: Endpoint, result?: FlatResponse | ImmoscoutResult, flat?: FlatFoxResult): void {
         switch (endpoint.sitename) {
             case "homegate": {
                 result = result as FlatResponseHomegate;
@@ -136,8 +136,21 @@ export class Crawler {
                 break;
             }
             case "flatfox": {
-                const parsed: Flat = Parser.parseFlatFoxToFlat(flat!);
+                const parsed: Flat = Parser.parseFlatFoxToFlat(flat as FlatFoxResult);
                 this._persistentStorage.addData(parsed);
+                break;
+            }
+            case "immoscout": {
+                console.log("SIZE", (result as ImmoscoutResult).pagingInfo.itemsOnPage)
+                for (const property of (result as ImmoscoutResult).properties) {
+                    if(property.priceFormatted === "Price on request") {
+                        console.log("Skipping")
+                        continue
+                    }
+                    const parsed: Flat = Parser.parseImmoscoutToFlat(property);
+                    this._persistentStorage.addData(parsed);
+                }
+                break;
             }
         }
     }
@@ -145,6 +158,7 @@ export class Crawler {
     on(event: FlatSetEvent, listener: (flat: Flat) => void) {
         this._persistentStorage.data.on(event, listener)
     }
+
     off(event: FlatSetEvent, listener: (flat: Flat) => void) {
         this._persistentStorage.data.off(event, listener)
     }
@@ -153,10 +167,10 @@ export class Crawler {
         switch (endpoint.sitename) {
             case "flatfox": {
                 result = result as FlatResponseFlatfox[];
-                result.forEach((value:any & {pk:number}) => {
+                result.forEach((value: any & { pk: number }) => {
                     this.fetchFlat(endpoint, value.pk)
                         .then((flat: FlatFoxResult) => {
-                            this.processResultsImplicit(endpoint,undefined, flat);
+                            this.processResultsImplicit(endpoint, undefined, flat);
                         });
                 });
 

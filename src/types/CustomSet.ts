@@ -11,11 +11,8 @@ export class CustomSet<T extends Object & {
     }
 
     addData(data: T): boolean {
-        const storedIds: string[] = Array.from(this.values()).map((d:T) => d.id);
-
         if(Array.from(this.values()).find((d:T) => d.id === data.id)) return false;
         else {
-            
             this._onNewAdded.forEach(listener => listener(data));
             this.add(data);
             return true;

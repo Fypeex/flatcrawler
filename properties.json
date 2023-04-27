@@ -54,5 +54,21 @@
       "resultFormat": "array",
       "flatEndpoint": "https://flatfox.ch/api/v1/flat/"
     }
+  },
+  {
+    "sitename": "immoscout",
+    "url": "https://rest-api.immoscout24.ch/v4/en/properties",
+    "type": "API-GET",
+    "arguments": {
+        "l": "4147",
+      "nrf": "4",
+      "pt": "4t",
+      "t": "1",
+      "s": "1",
+      "ps": "200"
+    },
+    "result": {
+      "implicit": true
+    }
   }
 ]

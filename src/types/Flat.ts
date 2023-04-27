@@ -55,7 +55,7 @@ export type FlatListing = {
     "characteristics": FlatListingCharacteristics,
     "id": string,
     "localization": FlatListingLocalization
-    "meta": {
+    "meta"?: {
         "createdAt": string
     },
     "offerType": "RENT" | string,
@@ -72,9 +72,9 @@ export type FlatListingCard = {
 export interface Flat  {
     "website": "homegate" | "flatfox" | string,
     "link": string,
-    "listingType": FlatListingType
+    "listingType"?: FlatListingType
     "listing": FlatListing
-    "listingCard": FlatListingCard
+    "listingCard"?: FlatListingCard
     "id": string,
     "remoteViewing": boolean,
 }
