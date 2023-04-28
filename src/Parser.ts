@@ -2,13 +2,13 @@ import {FlatFoxResult} from "./types/FlatFoxResult.js";
 import {Flat} from "./types/Flat.js";
 import {Mail} from "./types/Mail.js";
 import fs from "fs";
-import {ImmoscoutResultProperty} from "./types/ImmoscoutResult";
+import {ImmoscoutResultProperty} from "./types/ImmoscoutResult.js";
 
 export class Parser {
     static parseFlatFoxToFlat(flat: FlatFoxResult): Flat {
         return {
             website: "flatfox",
-            link: flat.url,
+            link: "https://flatfox.ch" + flat.url,
             id: flat.pk.toString(),
             listing: {
                 address: {
@@ -35,9 +35,9 @@ export class Parser {
                     de: {
                         attachments: flat.images.map((image) => {
                             return {
-                                file: image.url,
+                                file: "https://flatfox.ch" + image.url,
                                 type: "IMAGE",
-                                url: image.url
+                                url: "https://flatfox.ch" + image.url
 
                             }
                         }),
