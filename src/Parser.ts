@@ -147,7 +147,7 @@ export class Parser {
         let template: string = fs.readFileSync("./src/types/emailTemplate.html", "utf-8");
         template = template.replace("{{website}}", flat.website.slice(0, 1).toUpperCase() + flat.website.slice(1));
         template = template.replace("{{address}}", flat.listing.address.street + ", " + flat.listing.address.postalCode + " " + flat.listing.address.locality);
-        template = template.replace("{{price}}", flat.listing.prices.rent.gross.toString());
+        template = template.replace("{{price}}", flat.listing.prices?.rent?.gross?.toString() || "No data");
         template = template.replace("{{rooms}}", flat.listing.characteristics.numberOfRooms?.toString() || "No data");
         template = template.replace("{{area}}", flat.listing.characteristics.livingSpace?.toString() || "No data");
         template = template.replace("{{description}}", flat.listing.localization.de?.text.description || "No description");

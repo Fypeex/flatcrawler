@@ -18,6 +18,7 @@ export class CustomSet<T extends Object & {
             }).catch((err) => {
                 console.error(err);
             }));
+
             return true;
         }
     }

@@ -13,26 +13,44 @@ export class Notifier {
     }
 
     public async notify(flat: Flat) {
-        if (!this.client) {
-            console.error("Google client not initialized");
-            return;
-        }
-        const mail: Mail = {
-            from: "me",
-            to: process.env["EMAIL_RECIPIENT"] || "ffel.wg@gmail.com",
-            subject: "New flat found",
-        }
-        const message = Parser.parseFlatToEmail(mail, flat)
-        const gmail = google.gmail({version: "v1", auth: this.client});
-        const raw = Parser.parseEmailToRaw(message);
-        if(!raw) return;
-        gmail.users.messages.send({
-            userId: "me",
-            requestBody: {
-                raw
+        return new Promise((resolve, reject) => {
+            try {
+                if (!this.client) {
+                    console.error("Google client not initialized");
+                    return;
+                }
+                const mail: Mail = {
+                    from: "me",
+                    to: process.env["EMAIL_RECIPIENT"] || "ffel.wg@gmail.com",
+                    subject: "New flat found",
+                }
+                const message = Parser.parseFlatToEmail(mail, flat)
+                const gmail = google.gmail({version: "v1", auth: this.client});
+                const raw = Parser.parseEmailToRaw(message);
+
+                if (!raw) {
+                    reject("Could not parse email");
+                    return;
+                }
+                gmail.users.messages.send({
+                    userId: "me",
+                    requestBody: {
+                        raw
+                    }
+                }).then((res) => {
+                    if (res.status === 200) {
+                        resolve(true);
+                    }
+                }).catch((error: any) => {
+                    console.error(error);
+                    reject(error);
+                });
+            } catch (error) {
+                console.error(error);
+                reject(error);
+                return;
             }
-        }).catch((error: any) => {
-            console.error(error);
+
         });
     }
 }
