@@ -17,9 +17,14 @@ export class Application {
             console.log("Notifier initialized");
         });
         this._crawler.on("new-added", (flat) => {
-            console.log("New flat added");
-            this._notifier.notify(flat).catch((err) => {
-                console.error(err);
+            return new Promise<boolean>((resolve, reject) => {
+                console.log("New flat added");
+                this._notifier.notify(flat).then(() => {
+                    resolve(true);
+                }).catch((err) => {
+                    reject(false);
+                    console.error(err);
+                })
             });
         });
         this._crawler.start();

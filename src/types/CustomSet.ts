@@ -1,7 +1,7 @@
 export class CustomSet<T extends Object & {
     id: string
 }> extends Set<T> {
-    private _onNewAdded: ((data: T) => void)[] = [];
+    private _onNewAdded: ((data: T) => Promise<boolean>)[] = [];
 
     constructor(data: T[] = []) {
         super();
@@ -13,20 +13,23 @@ export class CustomSet<T extends Object & {
     addData(data: T): boolean {
         if(Array.from(this.values()).find((d:T) => d.id === data.id)) return false;
         else {
-            this._onNewAdded.forEach(listener => listener(data));
-            this.add(data);
+            this._onNewAdded.forEach(listener => listener(data).then((sent) =>  {
+                if(sent) this.add(data)
+            }).catch((err) => {
+                console.error(err);
+            }));
             return true;
         }
     }
 
-    on(event: FlatSetEvent, listener: (data: T) => void): this {
+    on(event: FlatSetEvent, listener: (data: T) => Promise<boolean>): this {
         switch (event) {
             case "new-added":
                 this._onNewAdded.push(listener);
         }
         return this;
     };
-    off(event: FlatSetEvent, listener: (data: T) => void): this {
+    off(event: FlatSetEvent, listener: (data: T) => Promise<boolean>): this {
         switch (event) {
             case "new-added":
                 this._onNewAdded.splice(this._onNewAdded.indexOf(listener), 1);

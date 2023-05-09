@@ -154,11 +154,11 @@ export class Crawler {
         }
     }
 
-    on(event: FlatSetEvent, listener: (flat: Flat) => void) {
+    on(event: FlatSetEvent, listener: (flat: Flat) => Promise<boolean>) {
         this._persistentStorage.data.on(event, listener)
     }
 
-    off(event: FlatSetEvent, listener: (flat: Flat) => void) {
+    off(event: FlatSetEvent, listener: (flat: Flat) => Promise<boolean>) {
         this._persistentStorage.data.off(event, listener)
     }
 
