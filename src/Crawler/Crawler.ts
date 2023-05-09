@@ -31,8 +31,8 @@ export class Crawler {
 
         try {
             setInterval(() => {
-
                 this._endpoints.forEach((endpoint) => {
+                    console.log(new Date().toLocaleString(), "Fetching", endpoint.sitename)
                     this.fetchResults(endpoint)
                         .then((result) => {
                             this.processResults(endpoint, result);
@@ -42,6 +42,7 @@ export class Crawler {
             }, parseInt(process.env["CRAWL_INTERVAL"] || "20000"));
 
             this._endpoints.forEach((endpoint) => {
+                console.log(new Date().toLocaleString(), "Fetching", endpoint.sitename)
                 this.fetchResults(endpoint)
                     .then((result) => {
                         this.processResults(endpoint, result);

@@ -13,8 +13,11 @@ export class Application {
         await this._notifier.init().catch((err) => {
             console.error(err);
             process.exit(1);
+        }).finally(() => {
+            console.log("Notifier initialized");
         });
         this._crawler.on("new-added", (flat) => {
+            console.log("New flat added");
             this._notifier.notify(flat).catch((err) => {
                 console.error(err);
             });
