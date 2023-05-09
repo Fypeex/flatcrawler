@@ -161,7 +161,11 @@ export class Parser {
             `Content-Type: text/html; charset=UTF-8` + "\r\n\r\n" +
             `${template}`
     }
-    static parseEmailToRaw(email:string):string {
-        return btoa(email).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    static parseEmailToRaw(email:string):string | void {
+        try {
+            return btoa(email).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        } catch (e) {
+            console.error(e, email);
+        }
     }
 }

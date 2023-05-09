@@ -25,6 +25,7 @@ export class Notifier {
         const message = Parser.parseFlatToEmail(mail, flat)
         const gmail = google.gmail({version: "v1", auth: this.client});
         const raw = Parser.parseEmailToRaw(message);
+        if(!raw) return;
         gmail.users.messages.send({
             userId: "me",
             requestBody: {
