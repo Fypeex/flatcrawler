@@ -161,9 +161,19 @@ export class Parser {
             `Content-Type: text/html; charset=UTF-8` + "\r\n\r\n" +
             `${template}`
     }
+    static sanitizeString(input:string):string {
+        let sanitizedString = '';
+        for (let i = 0; i < input.length; i++) {
+            // Check if the character is within the Latin1 range
+            if (input.charCodeAt(i) <= 255) {
+                sanitizedString += input.charAt(i);
+            }
+        }
+        return sanitizedString;
+    }
     static parseEmailToRaw(email:string):string | void {
         try {
-            return btoa(email).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+            return btoa(this.sanitizeString(email)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
         } catch (e) {
             console.error(e, email);
         }
