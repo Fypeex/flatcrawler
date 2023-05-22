@@ -77,7 +77,7 @@ export class Parser {
     static parseImmoscoutToFlat(flat: ImmoscoutResultProperty): Flat {
         return {
             website: "immoscout",
-            link: "https://immoscout.ch" + flat.propertyUrl,
+            link: "https://immoscout24.ch" + flat.propertyUrl,
             id: flat.id.toString(),
             listing: {
                 address: {

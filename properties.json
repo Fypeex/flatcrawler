@@ -19,7 +19,7 @@
           "to": 4000
         },
         "numberOfRooms": {
-          "from": 4
+          "from": 2
         },
         "offerType": "RENT"
       },
@@ -40,7 +40,7 @@
       "east": 8.565311,
       "max_count": 400,
       "max_price": 4000,
-      "min_rooms": 4,
+      "min_rooms": 2,
       "north": 47.401032,
       "object_category": "APARTMENT",
       "offer_type": "RENT",
@@ -61,7 +61,7 @@
     "type": "API-GET",
     "arguments": {
         "l": "4147",
-      "nrf": "4",
+      "nrf": "2",
       "pt": "4t",
       "t": "1",
       "s": "1",
